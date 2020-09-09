@@ -1,9 +1,8 @@
 import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import styles from './MarkButton.scss';
-import classNames from 'classnames/bind';
+// import styles from './MarkButton.scss';
+// import classNames from 'classnames/bind';
 
-const cx = classNames.bind(styles);
+//const cx = classNames.bind(styles);
 
 const MarkButton = () => {
     return (

@@ -1,0 +1,27 @@
+@import "../../styles/mixin";
+
+.Home {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    height: 100vh;
+
+    .logoBox {
+
+        @include desktop {
+            width: 800px;
+            margin-bottom: 100px;
+        }
+
+        @include mobile {
+            width: 80%;
+            margin-bottom: 50px;
+        }
+
+        width: 80%;
+        margin-bottom: 50px;
+    }
+}

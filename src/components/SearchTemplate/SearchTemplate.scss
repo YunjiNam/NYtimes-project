@@ -1,0 +1,52 @@
+@import "../../styles/mixin";
+
+.SearchTemplate {
+
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .searchWrap {
+        @include desktop {
+            width: 1000px;
+        }
+
+        @include mobile {
+            width: 80%;
+        }
+
+        width: 80%;
+        height: 70px;
+
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        background-color: #0000002B;
+        border-radius: 15px;
+
+        .searchIcon {
+
+            width: 28px;
+            height: 28px;
+            margin-left: 30px;
+
+            color: #fff;
+        }
+
+        .searchBox {
+
+            width: 80%;
+            margin-left: 30px;
+
+            outline: none;
+            border: none;
+
+            font-weight: medium;
+            font-size: 25px;
+            background-color: #00000000;
+        }
+    }
+}
