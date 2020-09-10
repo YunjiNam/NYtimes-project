@@ -50,27 +50,6 @@ const ArticleTemplate = ({ list, marks, markHandler, remove }) => {
                     goMainArticle={goMainArticle}
                     checkMark={checkMark}
                 />
-                // <div className={cx('articleWrap')} key={idx} >
-                //     <div onClick={() => goMainArticle(list.web_url)}>
-                //         <div className={cx('imgWrap')}>
-                //             <img src={`https://www.nytimes.com/${list.multimedia.url}`} alt=""/>
-                //         </div>
-                //         <div className={cx('textWrap')}>
-                //             <div className={cx('headLine')}>
-                //                 <div className={cx('text')}>
-                //                     {list.headline.main}
-                //                 </div>
-                //                 <div className={cx('date')}>{list.pub_date.split('T')[0]}</div>
-                //             </div>
-                //             <div className={cx('byLine')}>{list.byline.original}</div>
-                //             <div className={cx('leadParagraph')}>{list.lead_paragraph.length < 80 ? list.lead_paragraph : `${list.lead_paragraph.substr(0, 80)} ...more`}</div>
-
-                //         </div>
-                //     </div>
-                //     <div className={cx('icon')} onClick={() => checkMark(list._id)}>
-                //         { marks && marks.includes(list) ? <BsBookmarkFill /> : <BsBookmarkPlus /> }
-                //     </div>
-                // </div>
             ))
             }
             {showMark && marks && marks.map((list,idx) => (
