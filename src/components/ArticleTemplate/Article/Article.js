@@ -9,9 +9,6 @@ const Article = ({ list, idx, web_url, headline, pub_date, byline, lead_paragrap
     return (
         <div className={cx('articleWrap')} key={idx} >
             <div onClick={() => goMainArticle(web_url)}>
-                {/* <div className={cx('imgWrap')}>
-                    <img src={`https://www.nytimes.com/${list.multimedia.url}`} alt=""/>
-                </div> */}
                 <div className={cx('textWrap')}>
                     <div className={cx('headLine')}>
                         <div className={cx('text')}>
