@@ -2,7 +2,7 @@ import React from "react"
 import styled from "@emotion/styled"
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs"
 
-const Article = ({
+const ArticleItem = ({
   list,
   idx,
   web_url,
@@ -31,7 +31,7 @@ const Article = ({
         </TextWrap>
       </div>
       <IconBtn onClick={() => checkMark(list._id)}>
-        {marks && marks.includes(list) ? (
+        {marks && marks.includes(list._id) ? (
           <BsBookmarkFill />
         ) : (
           <BsBookmarkPlus />
@@ -41,7 +41,7 @@ const Article = ({
   )
 }
 
-export default Article
+export default ArticleItem
 
 const ArticleWrap = styled.div`
   width: 1000px;

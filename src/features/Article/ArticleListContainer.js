@@ -1,25 +1,56 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "@emotion/styled"
-import Article from "./Article/Article"
+import { useDispatch, useSelector } from "react-redux"
+import { useHistory } from "react-router-dom"
+import ArticleItem from "./ArticleItem"
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs"
+import { addArticle, deletArticle, savedArticleList } from "./saveArticleSlice"
 
-const ArticleTemplate = ({ list, marks, markHandler, remove }) => {
+const ArticleListContainer = ({ articleList }) => {
   //const [lists, setLists] = useState([])
   const [mark, setMark] = useState([])
   const [showMark, setShowMark] = useState(false)
+  const [searchVal, setSearchVal] = useState('')
+  const history = useHistory()
+
+  useEffect(() => {
+    setSearchVal(history.location.hash.split('#')[1])
+  },[history.location])
+
+  const dispatch = useDispatch()
+  const markList = useSelector(savedArticleList)
+
+  useEffect(() => {
+    console.log('markList: ', markList && markList)
+  },[markList]);
 
   const checkMark = (id) => {
     if (!mark.includes(id)) {
       setMark(mark.concat(id))
-      const checkMark = list.filter((el) => el._id === id)
-      markHandler(checkMark)
+      const checkMark = articleList.filter((el) => el._id === id)
+      dispatch(addArticle({
+        keyWord: searchVal,
+        list: checkMark
+      }))
     } else {
+      console.log('del')
       const delMark = mark.filter((el) => el !== id)
       setMark(delMark)
-      const removeMark = marks.filter((el) => el._id !== id)
-      remove(removeMark)
+      dispatch(deletArticle(id))
     }
   }
+
+  // const checkMark = (id) => {
+  //   if (!mark.includes(id)) {
+  //     setMark(mark.concat(id))
+  //     const checkMark = articleList.filter((el) => el._id === id)
+  //     dispatch(addArticle(checkMark))
+  //   } else {
+  //     const delMark = mark.filter((el) => el !== id)
+  //     setMark(delMark)
+  //     dispatch(deletArticle(id))
+  //   }
+  // }
 
   const goMainArticle = (url) => {
     window.location = url
@@ -32,9 +63,8 @@ const ArticleTemplate = ({ list, marks, markHandler, remove }) => {
   return (
     <ArticleContainer>
       {!showMark &&
-        list &&
-        list.map((list, idx) => (
-          <Article
+        articleList?.map((list, idx) => (
+          <ArticleItem
             list={list}
             idx={idx}
             key={idx}
@@ -43,24 +73,23 @@ const ArticleTemplate = ({ list, marks, markHandler, remove }) => {
             pub_date={list.pub_date}
             byline={list.byline.original}
             lead_paragraph={list.lead_paragraph}
-            marks={marks}
+            marks={mark}
             goMainArticle={goMainArticle}
             checkMark={checkMark}
           />
         ))}
       {showMark &&
-        marks &&
-        marks.map((list, idx) => (
-          <Article
-            list={list}
+        markList?.map((item, idx) => (
+          <ArticleItem
+            list={item.list}
             idx={idx}
             key={idx}
-            web_url={list.web_url}
-            headline={list.headline.main}
-            pub_date={list.pub_date}
-            byline={list.byline.original}
-            lead_paragraph={list.lead_paragraph}
-            marks={marks}
+            web_url={item.list.web_url}
+            headline={item.list.headline.main}
+            pub_date={item.list.pub_date}
+            byline={item.list.byline.original}
+            lead_paragraph={item.list.lead_paragraph}
+            marks={mark}
             goMainArticle={goMainArticle}
             checkMark={checkMark}
           />
@@ -72,7 +101,7 @@ const ArticleTemplate = ({ list, marks, markHandler, remove }) => {
   )
 }
 
-export default ArticleTemplate
+export default ArticleListContainer
 
 const ArticleContainer = styled.div`
   display: flex;
