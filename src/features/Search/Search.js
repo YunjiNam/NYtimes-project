@@ -1,14 +1,22 @@
 import React from "react"
 import { withRouter } from "react-router-dom"
 import styled from "@emotion/styled"
+import { useDispatch } from "react-redux"
 import { CgSearch } from "react-icons/cg"
+import { useQueryClient } from "react-query"
+import { addValue } from "./searchSlice"
 
-const SearchTemplate = ({ searchHandler, history }) => {
+const Search = ({ history }) => {
+  const dispatch = useDispatch()
+
+  const queryClient = useQueryClient()
+
   const onChange = (e) => {
     //console.log(e.target.value);
-    if (e.keyCode === 13) {
-      searchHandler(e.target.value)
-      history.push("/articlelist")
+    if (e.keyCode === 13 && e.target.value !== "") {
+      dispatch(addValue(e.target.value))
+      history.push(`/article/#${e.target.value}`)
+      queryClient.invalidateQueries('article')
     }
   }
   return (
@@ -23,7 +31,7 @@ const SearchTemplate = ({ searchHandler, history }) => {
   )
 }
 
-export default withRouter(SearchTemplate)
+export default withRouter(Search)
 
 const SearchContainer = styled.div`
   width: 100vw;
