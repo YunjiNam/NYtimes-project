@@ -5,28 +5,23 @@ import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs"
 const ArticleItem = ({
   list,
   idx,
-  web_url,
-  headline,
-  pub_date,
-  byline,
-  lead_paragraph,
   goMainArticle,
   marks,
   checkMark,
 }) => {
   return (
     <ArticleWrap key={idx}>
-      <div onClick={() => goMainArticle(web_url)}>
+      <div onClick={() => goMainArticle(list.web_url)}>
         <TextWrap>
           <HeadLineGroup>
-            <HeadLineText>{headline}</HeadLineText>
-            <DateText>{pub_date.split("T")[0]}</DateText>
+            <HeadLineText>{list.headline.main}</HeadLineText>
+            <DateText>{list.pub_date.split("T")[0]}</DateText>
           </HeadLineGroup>
-          <ByLine>{byline}</ByLine>
+          <ByLine>{list.byline.original}</ByLine>
           <LeadParagraph>
-            {lead_paragraph.length < 80
-              ? lead_paragraph
-              : `${lead_paragraph.substr(0, 80)} ...more`}
+            {list.lead_paragraph.length < 80
+              ? list.lead_paragraph
+              : `${list.lead_paragraph.substr(0, 80)} ...more`}
           </LeadParagraph>
         </TextWrap>
       </div>

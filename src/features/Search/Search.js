@@ -4,19 +4,16 @@ import styled from "@emotion/styled"
 import { useDispatch } from "react-redux"
 import { CgSearch } from "react-icons/cg"
 import { useQueryClient } from "react-query"
-import { addValue } from "./searchSlice"
 
 const Search = ({ history }) => {
-  const dispatch = useDispatch()
-
   const queryClient = useQueryClient()
 
   const onChange = (e) => {
     //console.log(e.target.value);
     if (e.keyCode === 13 && e.target.value !== "") {
-      dispatch(addValue(e.target.value))
       history.push(`/article/#${e.target.value}`)
-      queryClient.invalidateQueries('article')
+
+      queryClient.invalidateQueries("article")
     }
   }
   return (
