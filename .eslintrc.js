@@ -2,9 +2,9 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
+    es2020: true
   },
-  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
+  extends: ["react-app", "eslint:recommended", "plugin:react/recommended"],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,

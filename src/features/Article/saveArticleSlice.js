@@ -11,8 +11,10 @@ const saveArticleSlice = createSlice({
     },
     deletArticle: {
       reducer: (state, action) => {
-        let filterList = state.filter((el) => el._id !== action.payload)
-        state = filterList
+        state.splice(
+          state.findIndex((el) => el.list[0]._id == action.payload),
+          1
+        )
       },
     },
   },
