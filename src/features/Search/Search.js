@@ -12,7 +12,6 @@ const Search = ({ history }) => {
     //console.log(e.target.value);
     if (e.keyCode === 13 && e.target.value !== "") {
       history.push(`/article/#${e.target.value}`)
-
       queryClient.invalidateQueries("article")
     }
   }
@@ -20,9 +19,13 @@ const Search = ({ history }) => {
     <SearchContainer>
       <SearchWrap>
         <SearchIcon>
-          <CgSearch />
+          <CgSearch size="24" />
         </SearchIcon>
-        <SearchInput placeholder="Search" onKeyUp={onChange} />
+        <SearchInput
+          placeholder="Search"
+          onKeyUp={onChange}
+          value={history.location.hash.split("#")[1]}
+        />
       </SearchWrap>
     </SearchContainer>
   )
@@ -51,8 +54,10 @@ const SearchWrap = styled.div`
 `
 
 const SearchIcon = styled.div`
-  width: 28px;
-  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
   margin-left: 30px;
 
   color: #fff;

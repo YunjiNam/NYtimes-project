@@ -8,16 +8,19 @@ import * as Api from "../../lib/api"
 
 const Article = () => {
   let history = useHistory()
-  const [searchVal, setSearchVal] = useState('')
-  const { data: { response: articleList } } = ArticleQuery(searchVal)
+  const [searchVal, setSearchVal] = useState("")
+  const {
+    data: { response: articleList },
+    isFetching,
+    isFetched,
+  } = ArticleQuery()
 
   useEffect(() => {
-    setSearchVal(history.location.hash.split('#')[1])
-  },[history.location])
-  console.log('history.location.hash: ', history.location.hash.split('#')[1])
-  console.log("articleList: ", articleList && articleList.docs)
+    setSearchVal(history.location.hash.split("#")[1])
+  }, [history.location])
+
   const goHome = () => {
-    history.push("/") 
+    history.push("/")
   }
   return (
     <ArticleListWrap>
@@ -27,7 +30,10 @@ const Article = () => {
         </svg>
       </LogoBox>
       <Search />
-      <ArticleListContainer articleList={articleList && articleList.docs} />
+      <ArticleListContainer
+        articleList={articleList && articleList.docs}
+        isFetching={isFetching}
+      />
     </ArticleListWrap>
   )
 }
@@ -44,7 +50,8 @@ const ArticleListWrap = styled.div`
 `
 
 const LogoBox = styled.div`
-  width: 80%;
-  margin-bottom: 50px;
+  width: 50%;
+  margin-top: 30px;
+  margin-bottom: 30px;
   cursor: pointer;
 `

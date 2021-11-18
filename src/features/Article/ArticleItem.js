@@ -1,16 +1,13 @@
 import React from "react"
 import styled from "@emotion/styled"
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs"
+import useWindowSize from "../../lib/useWindowSize"
 
-const ArticleItem = ({
-  list,
-  idx,
-  goMainArticle,
-  marks,
-  checkMark,
-}) => {
+const ArticleItem = ({ list, idx, goMainArticle, marks, checkMark }) => {
+  const size = useWindowSize()
+
   return (
-    <ArticleWrap key={idx}>
+    <ArticleWrap key={idx} width={size.width}>
       <div onClick={() => goMainArticle(list.web_url)}>
         <TextWrap>
           <HeadLineGroup>
@@ -39,8 +36,9 @@ const ArticleItem = ({
 export default ArticleItem
 
 const ArticleWrap = styled.div`
-  width: 1000px;
-  height: 148px;
+  width: ${(props) => props.width - 200}px;
+  /* width: 1000px; */
+  /* height: 148px; */
   margin-bottom: 20px;
 
   display: flex;
@@ -57,7 +55,8 @@ const ArticleWrap = styled.div`
 
 const TextWrap = styled.div`
   margin-left: 25px;
-  width: 100%;
+  width: 80%;
+  padding: 15px 0;
 `
 
 const HeadLineGroup = styled.div`
@@ -94,6 +93,7 @@ const ByLine = styled.div`
 const LeadParagraph = styled.div`
   font-size: 16px;
   font-weight: medium;
+  white-space: pre-wrap;
 `
 
 const IconBtn = styled.div`
