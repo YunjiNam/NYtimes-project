@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react"
 import styled from "@emotion/styled"
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
-import ArticleItem from "./ArticleItem"
+import { useMediaQuery } from "react-responsive"
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs"
+import ArticleItem from "./ArticleItem"
 import { addArticle, deletArticle, savedArticleList } from "./saveArticleSlice"
 import { addKeyword, delKeyword, saveKeywordList } from "./saveKeywordSlice"
 
-const ArticleListContainer = ({ articleList }) => {
+const ArticleListContainer = ({ articleList, isFetching }) => {
   //const [lists, setLists] = useState([])
   const [mark, setMark] = useState([])
   const [showMark, setShowMark] = useState(false)
   const [searchVal, setSearchVal] = useState("")
+  const [selKeyword, setSelKeyword] = useState("")
+  const [filterMarkList, setFilterMarkList] = useState()
   const history = useHistory()
 
   useEffect(() => {
@@ -28,6 +31,20 @@ const ArticleListContainer = ({ articleList }) => {
 
   console.log("markList: ", markList && markList)
   console.log("keywordList: ", keywordList && [...new Set(keywordList)])
+
+  const filterMark = (item) => {
+    if (selKeyword == item) {
+      setSelKeyword("")
+    } else {
+      setSelKeyword(item)
+      if (item !== "" && markList) {
+        setFilterMarkList(markList.filter((el) => el.keyWord == item))
+      }
+    }
+  }
+
+  console.log("selKeyword: ", selKeyword && selKeyword)
+  console.log("filterMarkList: ", filterMarkList && filterMarkList)
 
   const checkMark = (id) => {
     if (!mark.includes(id)) {
@@ -60,6 +77,7 @@ const ArticleListContainer = ({ articleList }) => {
 
   return (
     <ArticleContainer>
+      {isFetching && <div>로딩중...</div>}
       {!showMark &&
         articleList?.map((list, idx) => (
           <ArticleItem
@@ -72,13 +90,37 @@ const ArticleListContainer = ({ articleList }) => {
           />
         ))}
       <KeyWordGroup>
-        {keywordList &&
+        {showMark &&
+          keywordList &&
           [...new Set(keywordList)]?.map((item, idx) => {
-            return <KeyWordTag key={`${item}_${idx}`}>{item}</KeyWordTag>
+            return (
+              <KeyWordTag
+                key={`${item}_${idx}`}
+                select={selKeyword == item}
+                onClick={() => {
+                  filterMark(item)
+                }}
+              >
+                {item}
+              </KeyWordTag>
+            )
           })}
       </KeyWordGroup>
       {showMark &&
+        selKeyword == "" &&
         markList?.map((item, idx) => (
+          <ArticleItem
+            list={item?.list[0]}
+            idx={idx}
+            key={idx}
+            marks={mark}
+            goMainArticle={goMainArticle}
+            checkMark={checkMark}
+          />
+        ))}
+      {showMark &&
+        selKeyword !== "" &&
+        filterMarkList?.map((item, idx) => (
           <ArticleItem
             list={item?.list[0]}
             idx={idx}
@@ -139,10 +181,10 @@ const KeyWordTag = styled.div`
   align-items: center;
   padding: 5px;
   border-radius: 5px;
-  background-color: #a6e0ff;
+  background-color: ${(props) => (props.select ? "#F09469" : "#a6e0ff")};
   font-weight: bold;
   &:hover {
     cursor: pointer;
-    background-color: #7ac9f3;
+    background-color: ${(props) => (props.select ? "#F09469" : "#7ac9f3")};
   }
 `
