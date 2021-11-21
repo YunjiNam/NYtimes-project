@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { withRouter } from "react-router-dom"
 import styled from "@emotion/styled"
 import { useDispatch } from "react-redux"
@@ -24,7 +24,7 @@ const Search = ({ history }) => {
         <SearchInput
           placeholder="Search"
           onKeyUp={onChange}
-          value={history.location.hash.split("#")[1]}
+          onChange={onChange}
         />
       </SearchWrap>
     </SearchContainer>
