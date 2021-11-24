@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "@emotion/styled"
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs"
+import { useMediaQuery } from "react-responsive"
 import useWindowSize from "../../lib/useWindowSize"
 
 const ArticleItemGroup = ({
@@ -11,55 +12,84 @@ const ArticleItemGroup = ({
   showMark,
 }) => {
   const size = useWindowSize()
-  console.log("######## list: ", list && list)
+  const isDesktop = useMediaQuery({ minWidth: 1030 })
+  const isTablet = useMediaQuery({ minWidth: 600 })
+
   return (
     <>
-      {list &&
+      {!showMark &&
+        list &&
         list.map((item, idx) => (
-          <ArticleWrap key={idx} width={size.width}>
-            <div
-              onClick={() =>
-                goMainArticle(showMark ? item?.list[0].web_url : item.web_url)
-              }
-            >
+          <ArticleWrap
+            key={idx}
+            width={
+              isDesktop
+                ? size.width - 400
+                : isTablet
+                ? size.width - 200
+                : size.width - 100
+            }
+          >
+            <div onClick={() => goMainArticle(item.web_url)}>
               <TextWrap>
                 <HeadLineGroup>
-                  <HeadLineText>
-                    {showMark
-                      ? item?.list[0].headline.main
-                      : item.headline.main}
-                  </HeadLineText>
-                  <DateText>
-                    {showMark
-                      ? item?.list[0].pub_date.split("T")[0]
-                      : item.pub_date.split("T")[0]}
+                  <DateText isTablet={isTablet}>
+                    {item.pub_date.split("T")[0]}
                   </DateText>
+                  <HeadLineText isTablet={isTablet}>
+                    {item.headline.main}
+                  </HeadLineText>
                 </HeadLineGroup>
-                <ByLine>
-                  {showMark
-                    ? item?.list[0].byline.original
-                    : item.byline.original}
-                </ByLine>
+                <ByLine>{item.byline.original}</ByLine>
                 <LeadParagraph>
-                  {showMark
-                    ? item?.list[0].lead_paragraph.length < 80
-                    : item.lead_paragraph.length < 80
-                    ? showMark
-                      ? item?.list[0].lead_paragraph
-                      : item.lead_paragraph
-                    : `${
-                        showMark
-                          ? item?.list[0].lead_paragraph.substr(0, 80)
-                          : item.lead_paragraph.substr(0, 80)
-                      } ...more`}
+                  {item.lead_paragraph.length < 80
+                    ? item.lead_paragraph
+                    : `${item.lead_paragraph.substr(0, 160)} ...`}
                 </LeadParagraph>
               </TextWrap>
             </div>
-            <IconBtn
-              onClick={() => checkMark(showMark ? item?.list[0]._id : item._id)}
-            >
-              {marks &&
-              marks.includes(showMark ? item?.list[0]._id : item._id) ? (
+            <IconBtn onClick={() => checkMark(item._id)}>
+              {marks && marks.includes(item._id) ? (
+                <BsBookmarkFill />
+              ) : (
+                <BsBookmarkPlus />
+              )}
+            </IconBtn>
+          </ArticleWrap>
+        ))}
+      {showMark &&
+        list &&
+        list.map((item, idx) => (
+          <ArticleWrap
+            key={idx}
+            width={
+              isDesktop
+                ? size.width - 400
+                : isTablet
+                ? size.width - 200
+                : size.width - 100
+            }
+          >
+            <div onClick={() => goMainArticle(item?.list[0].web_url)}>
+              <TextWrap>
+                <HeadLineGroup>
+                  <DateText isTablet={isTablet}>
+                    {item?.list[0].pub_date.split("T")[0]}
+                  </DateText>
+                  <HeadLineText isTablet={isTablet}>
+                    {item?.list[0].headline.main}
+                  </HeadLineText>
+                </HeadLineGroup>
+                <ByLine>{item?.list[0].byline.original}</ByLine>
+                <LeadParagraph>
+                  {item?.list[0].lead_paragraph.length < 80
+                    ? item?.list[0].lead_paragraph
+                    : `${item?.list[0].lead_paragraph.substr(0, 160)} ...`}
+                </LeadParagraph>
+              </TextWrap>
+            </div>
+            <IconBtn onClick={() => checkMark(item?.list[0]._id)}>
+              {marks && marks.includes(item?.list[0]._id) ? (
                 <BsBookmarkFill />
               ) : (
                 <BsBookmarkPlus />
@@ -74,7 +104,7 @@ const ArticleItemGroup = ({
 export default ArticleItemGroup
 
 const ArticleWrap = styled.div`
-  width: ${(props) => props.width - 200}px;
+  width: ${(props) => props.width}px;
   /* width: 1000px; */
   /* height: 148px; */
   margin-bottom: 20px;
@@ -92,9 +122,7 @@ const ArticleWrap = styled.div`
 `
 
 const TextWrap = styled.div`
-  margin-left: 25px;
-  width: 80%;
-  padding: 15px 0;
+  padding: 20px 25px;
 `
 
 const HeadLineGroup = styled.div`
@@ -105,10 +133,11 @@ const HeadLineGroup = styled.div`
 `
 
 const HeadLineText = styled.div`
-  width: 80%;
   font-size: 20px;
   font-weight: bold;
+  margin-right: ${(props) => (props.isTablet ? 70 : 23)}px;
   margin-bottom: 10px;
+  ${(props) => !props.isTablet && "margin-top: 20px;"}
 `
 const DateText = styled.div`
   font-size: 13px;
@@ -117,7 +146,7 @@ const DateText = styled.div`
 
   position: absolute;
   margin-right: 30px;
-  right: 0;
+  ${(props) => (props.isTablet ? "right: 0;" : "left: 25px;")}
 `
 
 const ByLine = styled.div`
@@ -132,6 +161,7 @@ const LeadParagraph = styled.div`
   font-size: 16px;
   font-weight: medium;
   white-space: pre-wrap;
+  padding-right: 40px;
 `
 
 const IconBtn = styled.div`

@@ -12,7 +12,9 @@ export const ArticleQuery = (text) => {
   return useQuery({
     queryKey: "article",
     queryFn: getArticle,
-    enabled: history.location.hash.split("#")[1] !== "",
+    enabled:
+      history.location.hash.split("#")[1] !== "" &&
+      history.location.hash.split("#")[1] !== undefined,
     placeholderData: { data: [] },
   })
 }
