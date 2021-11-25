@@ -69,7 +69,8 @@ const Article = () => {
   }
 
   const goMainArticle = (url) => {
-    window.location = url
+    // window.location = url
+    window.open(url, "_blank")
   }
 
   const showMarkHandler = () => {

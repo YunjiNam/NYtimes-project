@@ -2,6 +2,7 @@ import React from "react"
 import styled from "@emotion/styled"
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs"
 import { useMediaQuery } from "react-responsive"
+import Moment from "react-moment"
 import useWindowSize from "../../lib/useWindowSize"
 
 const ArticleItemGroup = ({
@@ -34,7 +35,7 @@ const ArticleItemGroup = ({
               <TextWrap>
                 <HeadLineGroup>
                   <DateText isTablet={isTablet}>
-                    {item.pub_date.split("T")[0]}
+                    <Moment format="MMM DD YYYY">{item.pub_date}</Moment>
                   </DateText>
                   <HeadLineText isTablet={isTablet}>
                     {item.headline.main}
@@ -74,7 +75,9 @@ const ArticleItemGroup = ({
               <TextWrap>
                 <HeadLineGroup>
                   <DateText isTablet={isTablet}>
-                    {item?.list[0].pub_date.split("T")[0]}
+                    <Moment format="MMM DD YYYY">
+                      {item?.list[0].pub_date}
+                    </Moment>
                   </DateText>
                   <HeadLineText isTablet={isTablet}>
                     {item?.list[0].headline.main}

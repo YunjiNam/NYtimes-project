@@ -12,7 +12,6 @@ const Routes = () => {
       <Router>
         <Switch>
           <Route exact path="/" component={Article} />
-          {/* <Route exact path="/article/" component={Article} /> */}
         </Switch>
       </Router>
       <ReactQueryDevtools initialIsOpen={false} />
