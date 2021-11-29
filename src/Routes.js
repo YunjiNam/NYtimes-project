@@ -1,17 +1,22 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Home from "./pages/Home/Home";
-import ArticleList from "./pages/ArticleList/ArticleList";
+import React from "react"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import { QueryClient, QueryClientProvider } from "react-query"
+import { ReactQueryDevtools } from "react-query/devtools"
+import Article from "./features/Article/Article"
+
+const queryClient = new QueryClient()
 
 const Routes = () => {
-    return (
-        <Router>
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/articlelist" component={ArticleList} />
-            </Switch>
-        </Router>
-    )
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Article} />
+        </Switch>
+      </Router>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  )
 }
 
-export default Routes;
+export default Routes

@@ -6,17 +6,22 @@
     "@emotion/css": "11.1.3",
     "@emotion/react": "11.4.1",
     "@emotion/styled": "11.3.0",
+    "@reduxjs/toolkit": "1.6.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.20.0",
     "classnames": "^2.2.6",
     "facepaint": "1.2.1",
+    "moment": "2.29.1",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.11.0",
-    "react-redux": "^7.2.1",
+    "react-moment": "1.1.1",
+    "react-query": "3.24.5",
+    "react-redux": "7.2.5",
+    "react-responsive": "9.0.0-beta.4",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
@@ -29,8 +34,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "postinstall": "husky install && cd app && yarn install"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,21 +52,11 @@
     ]
   },
   "devDependencies": {
-    "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.25.1",
     "husky": "6.0.0",
     "lint-staged": "11.1.2",
     "prettier": "2.4.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.+(js|jsx)": "eslint --fix",
-    "*.+(json|css|md)": "prettier --write"
   }
 }
