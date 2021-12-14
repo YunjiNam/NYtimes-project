@@ -1,11 +1,13 @@
 import { useQuery } from "react-query"
 import { withRouter, useHistory } from "react-router-dom"
+import queryString from "query-string"
 import * as Api from "../api"
 
 export const ArticleQuery = (text) => {
   let history = useHistory()
+  const query = queryString.parse(history.location.search)
   const getArticle = async () => {
-    const { data } = await Api.getArticle(history.location.hash.split("#")[1])
+    const { data } = await Api.getArticle(query && query.keyword)
     return data
   }
 
@@ -13,8 +15,7 @@ export const ArticleQuery = (text) => {
     queryKey: "article",
     queryFn: getArticle,
     enabled:
-      history.location.hash.split("#")[1] !== "" &&
-      history.location.hash.split("#")[1] !== undefined,
+      query && query.keyword !== "" && query && query.keyword !== undefined,
     placeholderData: { data: [] },
   })
 }

@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { withRouter } from "react-router-dom"
 import styled from "@emotion/styled"
-import { useDispatch } from "react-redux"
 import { CgSearch } from "react-icons/cg"
 import { useQueryClient } from "react-query"
 import { useMediaQuery } from "react-responsive"
@@ -16,7 +15,7 @@ const Search = ({ history }) => {
   const onChange = (e) => {
     //console.log(e.target.value);
     if (e.keyCode === 13 && e.target.value !== "") {
-      history.push(`/#${e.target.value}`)
+      history.push(`/?keyword=${e.target.value}`)
       queryClient.invalidateQueries("article")
     }
   }
