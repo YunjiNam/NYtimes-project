@@ -4,6 +4,8 @@ import { withRouter, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs"
 import { useMediaQuery } from "react-responsive"
+import queryString from "query-string"
+
 import { ArticleQuery } from "../../lib/apiQueries"
 import ArticleItemGroup from "./ArticleItemGroup"
 import { addArticle, deletArticle, savedArticleList } from "./saveArticleSlice"
@@ -13,6 +15,7 @@ import Search from "../Search/Search"
 const Article = () => {
   let history = useHistory()
   const isTablet = useMediaQuery({ minWidth: 600 })
+  const query = queryString.parse(history.location.search)
 
   const dispatch = useDispatch()
   const [searchVal, setSearchVal] = useState("")
@@ -29,8 +32,8 @@ const Article = () => {
   const keywordList = useSelector(saveKeywordList)
 
   useEffect(() => {
-    setSearchVal(history.location.hash.split("#")[1])
-  }, [history.location])
+    setSearchVal(query && query.keyword)
+  }, [history.location.search])
 
   const goHome = () => {
     window.location.reload()
