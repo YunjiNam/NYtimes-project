@@ -7,6 +7,7 @@ import { useMediaQuery } from "react-responsive"
 import queryString from "query-string"
 
 import { ArticleQuery } from "../../lib/apiQueries"
+import useWindowSize from "../../lib/useWindowSize"
 import ArticleItemGroup from "./ArticleItemGroup"
 import { addArticle, deletArticle, savedArticleList } from "./saveArticleSlice"
 import { addKeyword, delKeyword, saveKeywordList } from "./saveKeywordSlice"
@@ -14,15 +15,17 @@ import Search from "../Search/Search"
 
 const Article = () => {
   let history = useHistory()
+  const size = useWindowSize()
   const isTablet = useMediaQuery({ minWidth: 600 })
+  const isDesktop = useMediaQuery({ minWidth: 1030 })
   const query = queryString.parse(history.location.search)
 
   const dispatch = useDispatch()
   const [searchVal, setSearchVal] = useState("")
   const [mark, setMark] = useState([])
   const [showMark, setShowMark] = useState(false)
-  const [selKeyword, setSelKeyword] = useState("")
-  const [filterMarkList, setFilterMarkList] = useState()
+  const [selKeyword, setSelKeyword] = useState([])
+  const [filterMarkList, setFilterMarkList] = useState([])
   const {
     data: { response: articleList },
     isFetching,
@@ -40,12 +43,19 @@ const Article = () => {
   }
 
   const filterMark = (item) => {
-    if (selKeyword == item) {
-      setSelKeyword("")
+    if (selKeyword.includes(item)) {
+      const delSelKeyword = selKeyword.filter((el) => el !== item)
+      setSelKeyword(delSelKeyword)
+      setFilterMarkList(
+        markList.filter((el) => delSelKeyword.includes(el.keyWord))
+      )
     } else {
-      setSelKeyword(item)
+      let addSelKeyword = [...selKeyword, item]
+      setSelKeyword(addSelKeyword)
       if (item !== "" && markList) {
-        setFilterMarkList(markList.filter((el) => el.keyWord == item))
+        setFilterMarkList(
+          markList.filter((el) => addSelKeyword.includes(el.keyWord))
+        )
       }
     }
   }
@@ -65,7 +75,6 @@ const Article = () => {
       const delMark = mark.filter((el) => el !== id)
       setMark(delMark)
       let filer = markList.filter((el) => el.list[0]._id == id)
-      console.log("file: ", filer[0].keyWord)
       dispatch(delKeyword(filer[0].keyWord))
       dispatch(deletArticle(id))
     }
@@ -78,6 +87,7 @@ const Article = () => {
 
   const showMarkHandler = () => {
     setShowMark(!showMark)
+    setSelKeyword([])
   }
 
   return (
@@ -88,14 +98,24 @@ const Article = () => {
         </svg>
       </LogoBox>
       <Search />
-      <KeyWordGroup>
+      <KeyWordGroup
+        width={
+          isDesktop
+            ? size.width - 400
+            : isTablet
+            ? size.width - 200
+            : size.width - 100
+        }
+        showMark={showMark}
+      >
+        <GroupTitle>Keyword filter | </GroupTitle>
         {showMark &&
           keywordList &&
           [...new Set(keywordList)]?.map((item, idx) => {
             return (
               <KeyWordTag
                 key={`${item}_${idx}`}
-                select={selKeyword == item}
+                select={selKeyword.includes(item)}
                 onClick={() => {
                   filterMark(item)
                 }}
@@ -105,13 +125,13 @@ const Article = () => {
             )
           })}
       </KeyWordGroup>
-      <ArticleContainer>
+      <ArticleContainer showMark={showMark}>
         {isFetching && <div>로딩중...</div>}
         <ArticleItemGroup
           list={
-            showMark && selKeyword == "" && markList
+            showMark && selKeyword.length === 0 && markList
               ? markList
-              : showMark && selKeyword !== "" && filterMarkList
+              : showMark && selKeyword !== [] && filterMarkList
               ? filterMarkList
               : articleList && articleList.docs
           }
@@ -156,7 +176,7 @@ const ArticleContainer = styled.div`
   flex-direction: column;
   position: relative;
 
-  margin-top: 45px;
+  ${(props) => (!props.showMark ? "margin-top: 45px;" : "margin-top: 15px;")}
   margin-bottom: 75px;
 `
 
@@ -175,24 +195,37 @@ const ShowMarkBtn = styled.div`
   cursor: pointer;
 `
 const KeyWordGroup = styled.div`
-  display: flex;
-  justify-content: center;
+  display: ${(props) => (props.showMark ? "grid" : "none")};
+  grid-template-columns: 130px repeat(auto-fill, minmax(12%, auto));
+  justify-content: flex-start;
   align-items: center;
   flex-direction: row;
-  gap: 10px;
-  margin: 20px 0 5px 0;
+  /* gap: 10px; */
+  grid-gap: 12px 12px;
+  margin: 20px 0 5px 20px;
+  width: ${(props) => props.width}px;
+`
+
+const GroupTitle = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 10px;
 `
 
 const KeyWordTag = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px;
-  border-radius: 5px;
-  background-color: ${(props) => (props.select ? "#F09469" : "#a6e0ff")};
+  padding: 5px 8px;
+  background-color: ${(props) => (props.select ? "#a6e0ff" : "#fff")};
   font-weight: bold;
+  font-size: 14px;
+
+  box-shadow: 2px 2px 6px #00000029;
+  border-radius: 50px;
+
   &:hover {
     cursor: pointer;
-    background-color: ${(props) => (props.select ? "#F09469" : "#7ac9f3")};
+    background-color: ${(props) => (props.select ? "#7ac9f3" : "#a6e0ff")};
   }
 `
