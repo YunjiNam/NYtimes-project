@@ -16,6 +16,7 @@ const ArticleItemGroup = ({
   const isDesktop = useMediaQuery({ minWidth: 1030 })
   const isTablet = useMediaQuery({ minWidth: 600 })
 
+  console.log("list: ", list && list)
   return (
     <>
       {!showMark &&
