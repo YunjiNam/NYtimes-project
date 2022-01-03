@@ -60,6 +60,12 @@ const Article = () => {
     }
   }
 
+  useEffect(() => {
+    if (filterMarkList.length === 0) {
+      setSelKeyword([])
+    }
+  }, [filterMarkList])
+
   const checkMark = (id) => {
     if (!mark.includes(id)) {
       setMark(mark.concat(id))
@@ -77,6 +83,10 @@ const Article = () => {
       let filer = markList.filter((el) => el.list[0]._id == id)
       dispatch(delKeyword(filer[0].keyWord))
       dispatch(deletArticle(id))
+      if (selKeyword.length !== 0) {
+        let delList = filterMarkList.filter((el) => el.list[0]._id !== id)
+        setFilterMarkList(delList)
+      }
     }
   }
 
@@ -109,6 +119,14 @@ const Article = () => {
         showMark={showMark}
       >
         <GroupTitle>Keyword filter | </GroupTitle>
+        <KeyWordTag
+          key={`keyword_all`}
+          onClick={() => {
+            setSelKeyword([])
+          }}
+        >
+          All
+        </KeyWordTag>
         {showMark &&
           keywordList &&
           [...new Set(keywordList)]?.map((item, idx) => {
@@ -131,7 +149,7 @@ const Article = () => {
           list={
             showMark && selKeyword.length === 0 && markList
               ? markList
-              : showMark && selKeyword !== [] && filterMarkList
+              : showMark && selKeyword.length !== 0 && filterMarkList
               ? filterMarkList
               : articleList && articleList.docs
           }
